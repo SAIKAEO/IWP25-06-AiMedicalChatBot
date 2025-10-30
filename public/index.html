@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediCare Hospital - AI Health Assistant</title>
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&family=Material+Symbols+Rounded" />
+
+  <style>
+    /* ===== GLOBAL STYLES ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    :root {
+      --primary-blue: #1a73e8;
+      --primary-dark: #1558b0;
+      --secondary-blue: #e8f0fe;
+      --text-dark: #202124;
+      --text-light: #5f6368;
+      --white: #ffffff;
+      --background: #f8f9fa;
+      --error-red: #d32f2f;
+      --success-green: #388e3c;
+      --warning-yellow: #f57c00;
+      --hospital-blue: #0066cc;
+      --hospital-light: #e6f2ff;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--text-dark);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    h1 { font-size: 2.5rem; font-weight: 700; }
+    h2 { font-size: 2rem; font-weight: 600; }
+    h3 { font-size: 1.5rem; font-weight: 600; }
+    p { font-size: 1.1rem; margin-bottom: 1rem; }
+
+    /* ===== MEDICAL DISCLAIMER BANNER ===== */
+    .medical-disclaimer {
+      background: linear-gradient(135deg, #ffebee 0%, #fff3e0 100%);
+      border-bottom: 3px solid var(--error-red);
+      padding: 15px 0;
+      margin: 0;
+    }
+
+    .disclaimer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .disclaimer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .disclaimer-title {
+      color: var(--error-red);
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .emergency-contacts {
+      background: rgba(244, 67, 54, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .emergency-title {
+      color: var(--error-red);
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    /* ===== NAVIGATION ===== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 50px;
+      background: var(--white);
+      box-shadow: 0 2px 10px rgba(60, 64, 67, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+      color: var(--hospital-blue);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--hospital-blue);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background: var(--hospital-light);
+      color: var(--hospital-blue);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--hospital-blue);
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      display: flex;
+      align-items: center;
+      padding: 60px 10%;
+      background: linear-gradient(rgba(0, 102, 204, 0.9), rgba(0, 102, 204, 0.8)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      color: var(--white);
+      min-height: 70vh;
+    }
+
+    .hero-content {
+      flex: 1;
+      max-width: 600px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .hero-image {
+      flex: 1;
+      text-align: center;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      padding: 80px 10%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+      color: var(--hospital-blue);
+    }
+
+    .section-dark {
+      background: var(--background);
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .about-image {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ===== SERVICES ===== */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: var(--hospital-blue);
+    }
+
+    /* ===== DOCTORS SECTION ===== */
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .doctor-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .doctor-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .doctor-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .doctor-info {
+      padding: 20px;
+    }
+
+    .doctor-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--hospital-blue);
+    }
+
+    .doctor-specialty {
+      color: var(--text-light);
+      margin-bottom: 10px;
+    }
+
+    /* ===== SECURITY FEATURES ===== */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .security-card {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid var(--hospital-blue);
+    }
+
+    .security-card h3 {
+      color: var(--hospital-blue);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .contact-info {
+      background: var(--hospital-light);
+      padding: 30px;
+      border-radius: 12px;
+    }
+
+    .contact-form {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--hospital-blue);
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--error-red);
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--hospital-blue);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* ===== CHATBOT ===== */
+    #chatbot-toggler {
+      position: fixed;
+      bottom: 30px;
+      right: 35px;
+      border: none;
+      height: 60px;
+      width: 60px;
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--hospital-blue);
+      box-shadow: 0 4px 20px rgba(26, 115, 232, 0.3);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    #chatbot-toggler:hover {
+      transform: scale(1.1);
+      background: var(--primary-dark);
+    }
+
+    .chatbot-popup {
+      position: fixed;
+      right: 35px;
+      bottom: 100px;
+      width: 400px;
+      height: 600px;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .chatbot-popup.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background: var(--hospital-blue);
+      border-radius: 16px 16px 0 0;
+      color: var(--white);
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chatbot-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--hospital-blue);
+      font-weight: bold;
+    }
+
+    .header-info h3 {
+      margin: 0;
+      color: var(--white);
+      font-size: 1.3rem;
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      display: flex;
+      gap: 10px;
+      max-width: 85%;
+    }
+
+    .bot-message {
+      align-self: flex-start;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .bot-message .message-avatar {
+      background: var(--hospital-light);
+      color: var(--hospital-blue);
+    }
+
+    .user-message .message-avatar {
+      background: var(--hospital-blue);
+      color: var(--white);
+    }
+
+    .message-content {
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+
+    .bot-message .message-content {
+      background: var(--hospital-light);
+      border-radius: 18px 18px 18px 4px;
+      color: var(--text-dark);
+    }
+
+    .user-message .message-content {
+      background: var(--hospital-blue);
+      border-radius: 18px 18px 4px 18px;
+      color: var(--white);
+    }
+
+    .uploaded-image {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      margin-top: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ===== QUICK QUESTIONS STYLES ===== */
+    .quick-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .question-chip {
+      background: var(--white);
+      border: 1px solid var(--hospital-blue);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      color: var(--hospital-blue);
+    }
+
+    .question-chip:hover {
+      background: var(--hospital-blue);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    .suggested-questions {
+      background: var(--hospital-light);
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+      border-left: 4px solid var(--hospital-blue);
+    }
+
+    .suggested-questions h4 {
+      color: var(--hospital-blue);
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .suggested-questions-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .chat-footer {
+      padding: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .chat-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      resize: none;
+      height: 50px;
+      max-height: 120px;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--hospital-blue);
+    }
+
+    .chat-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-btn {
+      width: 45px;
+      height: 45px;
+      border: none;
+      border-radius: 50%;
+      background: var(--background);
+      color: var(--text-light);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .chat-btn:hover {
+      background: var(--hospital-light);
+      color: var(--hospital-blue);
+    }
+
+    .send-btn {
+      background: var(--hospital-blue);
+      color: var(--white);
+    }
+
+    .send-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .mic-btn.recording {
+      background: var(--error-red);
+      color: var(--white);
+      animation: pulse 1.5s infinite;
+    }
+
+    .image-btn:hover {
+      background: #fff3cd;
+      color: #ffc107;
+    }
+
+    .mic-permission-request {
+      background: var(--hospital-light);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+      border-left: 4px solid var(--warning-yellow);
+    }
+
+    .mic-permission-request p {
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    .permission-btn {
+      background: var(--warning-yellow);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-right: 10px;
+    }
+
+    .permission-btn:hover {
+      background: #e67300;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 10px 0;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--text-light);
+      border-radius: 50%;
+      animation: typingAnimation 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingAnimation {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--text-dark);
+      color: var(--white);
+      padding: 40px 10%;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .footer-section h3 {
+      color: var(--white);
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+    }
+
+    .footer-disclaimer {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      grid-column: 1 / -1;
+      text-align: center;
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @media (max-width: 1024px) {
+      .hero h1 { font-size: 2.5rem; }
+      .section { padding: 60px 5%; }
+    }
+
+    @media (max-width: 768px) {
+      /* Typography */
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.8rem; }
+      h3 { font-size: 1.3rem; }
+      p { font-size: 1.1rem; }
+
+      /* Layout */
+      header { padding: 15px 20px; }
+      
+      .hamburger { display: block; }
+      
+      nav ul {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav ul.show { display: flex; }
+
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 5%;
+      }
+
+      .hero-content { max-width: 100%; }
+
+      .about-content { grid-template-columns: 1fr; }
+      
+      .contact-grid { grid-template-columns: 1fr; }
+
+      .chatbot-popup {
+        width: 100%;
+        height: 80%;
+        right: 0;
+        bottom: 0;
+        border-radius: 0;
+      }
+
+      #chatbot-toggler {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.8rem; }
+      .section { padding: 40px 20px; }
+      
+      .security-grid,
+      .services-grid,
+      .doctors-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero-stats {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+
+  <!-- Navigation -->
+  <header>
+    <div class="logo">
+      <span class="logo-text">MediCare Hospital</span>
+    </div>
+    <button class="hamburger" aria-label="Toggle navigation">☰</button>
+    <nav>
+      <ul>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#doctors">Our Doctors</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Your Health is Our Priority</h1>
+      <p>
+        At MediCare Hospital, we provide comprehensive healthcare services with cutting-edge technology 
+        and a compassionate approach to patient care.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Expert Doctors</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Emergency Care</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">95%</div>
+          <div class="stat-label">Patient Satisfaction</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <!-- Background image set via CSS -->
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section section-dark">
+    <h2 class="section-title">About MediCare Hospital</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <h3>Leading Healthcare Excellence Since 1995</h3>
+        <p>
+          MediCare Hospital is a state-of-the-art medical facility dedicated to providing exceptional 
+          healthcare services to our community. With over 25 years of experience, we combine medical 
+          expertise with advanced technology to deliver personalized patient care.
+        </p>
+        <p>
+          Our mission is to improve the health and well-being of our patients through compassionate 
+          care, innovative treatments, and a commitment to medical excellence.
+        </p>
+        <div style="margin-top: 30px;">
+          <h4>Our Facilities</h4>
+          <ul style="list-style: none; margin-top: 15px;">
+            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+              <span style="position: absolute; left: 0; color: var(--hospital-blue);">✓</span>
+              Advanced Diagnostic Center
+            </li>
+            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+              <span style="position: absolute; left: 0; color: var(--hospital-blue);">✓</span>
+              24/7 Emergency & Trauma Center
+            </li>
+            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+              <span style="position: absolute; left: 0; color: var(--hospital-blue);">✓</span>
+              Modern Surgical Suites
+            </li>
+            <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
+              <span style="position: absolute; left: 0; color: var(--hospital-blue);">✓</span>
+              Comprehensive Maternity Care
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="about-image">
+        <img src="hospital1.jpg" alt="Modern hospital facility">
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section">
+    <h2 class="section-title">Our Medical Services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🫀</div>
+        <h3>Cardiology</h3>
+        <p>
+          Comprehensive heart care including diagnostics, treatment, and rehabilitation for all cardiac conditions.
+        </p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🧠</div>
+        <h3>Neurology</h3>
+        <p>
+          Expert diagnosis and treatment for disorders of the nervous system, brain, and spinal cord.
+        </p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🦴</div>
+        <h3>Orthopedics</h3>
+        <p>
+          Specialized care for bones, joints, ligaments, tendons, and muscles with advanced surgical options.
+        </p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">👶</div>
+        <h3>Pediatrics</h3>
+        <p>
+          Compassionate healthcare for infants, children, and adolescents in a child-friendly environment.
+        </p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">👁️</div>
+        <h3>Ophthalmology</h3>
+        <p>
+          Complete eye care services from routine examinations to advanced surgical procedures.
+        </p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🦷</div>
+        <h3>Dentistry</h3>
+        <p>
+          Comprehensive dental care including preventive, restorative, and cosmetic treatments.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Doctors Section -->
+  <section id="doctors" class="section section-dark">
+    <h2 class="section-title">Meet Our Specialists</h2>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <img src="doctor2.jpg" alt="Dr. Sarah Johnson" class="doctor-image">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Sarah Johnson</div>
+          <div class="doctor-specialty">Cardiologist</div>
+          <p>15+ years of experience in interventional cardiology and heart disease prevention.</p>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Dr. Michael Chen" class="doctor-image">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Michael Chen</div>
+          <div class="doctor-specialty">Neurologist</div>
+          <p>Specialized in stroke treatment, epilepsy, and neurodegenerative disorders.</p>
+        </div>
+      </div>
+      <div class="doctor-card">
+        <img src="doctor1.jpg" alt="Dr. Maria Rodriguez" class="doctor-image">
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Maria Rodriguez</div>
+          <div class="doctor-specialty">Orthopedic Surgeon</div>
+          <p>Expert in joint replacement, sports injuries, and minimally invasive procedures.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security Features -->
+  <section id="security" class="section">
+    <h2 class="section-title">Secure Health Technology</h2>
+    <div class="security-grid">
+      <div class="security-card">
+        <h3>🛡️ Protected Health Information</h3>
+        <p>
+          All patient data and medical records are secured with advanced encryption and access controls 
+          to ensure complete confidentiality.
+        </p>
+      </div>
+      <div class="security-card">
+        <h3>🔐 Secure AI Integration</h3>
+        <p>
+          Our AI health assistant operates through protected backend systems, ensuring API keys and 
+          sensitive data are never exposed in client-side code.
+        </p>
+      </div>
+      <div class="security-card">
+        <h3>⚕️ Medical Safety Protocols</h3>
+        <p>
+          Comprehensive medical disclaimers and emergency contact information prioritize 
+          user safety alongside technological innovation.
+        </p>
+      </div>
+      <div class="security-card">
+        <h3>♿ Accessible Design</h3>
+        <p>
+          Our website meets WCAG accessibility standards with proper contrast, font sizes, 
+          and navigation for all users.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section-dark">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Visit Our Hospital</h3>
+        <p><strong>Address:</strong> 123 Healthcare Avenue, Medical District, City 10100</p>
+        <p><strong>Phone:</strong> (012) 345-6789</p>
+        <p><strong>Emergency:</strong> (012) 345-6790</p>
+        <p><strong>Email:</strong> info@medicare-hospital.com</p>
+        
+        <div style="margin-top: 30px;">
+          <h4>Opening Hours</h4>
+          <p><strong>Outpatient Department:</strong> 8:00 AM - 8:00 PM (Mon-Sat)</p>
+          <p><strong>Emergency Department:</strong> 24/7</p>
+          <p><strong>Pharmacy:</strong> 7:00 AM - 10:00 PM (Daily)</p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <h4>University Project Information</h4>
+          <p><strong>Course:</strong> EN842300 Interactive Web Programming</p>
+          <p><strong>Student:</strong> Saikaeo Chamnanchue</p>
+          <p><strong>Student ID:</strong> 643040624-8</p>
+          <p><strong>University:</strong> Khon Kaen University</p>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <h3>Schedule an Appointment</h3>
+        <form id="appointment-form">
+          <div class="form-group">
+            <label for="name" class="required">Full Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email" class="required">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone" class="required">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+          <div class="form-group">
+            <label for="department">Department</label>
+            <select id="department" name="department">
+              <option value="">Select a department</option>
+              <option value="cardiology">Cardiology</option>
+              <option value="neurology">Neurology</option>
+              <option value="orthopedics">Orthopedics</option>
+              <option value="pediatrics">Pediatrics</option>
+              <option value="ophthalmology">Ophthalmology</option>
+              <option value="dentistry">Dentistry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Request Appointment</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>MediCare Hospital</h3>
+        <p>Providing exceptional healthcare with compassion and innovation since 1995.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul style="list-style: none;">
+          <li><a href="#home" style="color: var(--white); text-decoration: none;">Home</a></li>
+          <li><a href="#about" style="color: var(--white); text-decoration: none;">About Us</a></li>
+          <li><a href="#services" style="color: var(--white); text-decoration: none;">Services</a></li>
+          <li><a href="#doctors" style="color: var(--white); text-decoration: none;">Our Doctors</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <p>123 Healthcare Avenue</p>
+        <p>Medical District, City 10100</p>
+        <p>Phone: (012) 345-6789</p>
+        <p>Email: info@medicare-hospital.com</p>
+      </div>
+      <div class="footer-disclaimer">
+        <p>
+          <strong>University Project Disclaimer:</strong> This website is created for educational purposes as part of 
+          EN842300 Interactive Web Programming course. This is not a real medical application and should not be used 
+          for actual healthcare decisions.
+        </p>
+        <p style="margin-top: 15px;">© 2025 MediCare Hospital Demo - EN842300 Interactive Web Programming - Khon Kaen University</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AI Chatbot -->
+  <button id="chatbot-toggler">
+    <span>💬</span>
+  </button>
+
+  <div class="chatbot-popup">
+    <div class="chat-header">
+      <div class="header-info">
+        <div class="chatbot-avatar">AI</div>
+        <h3>MediCare AI Assistant</h3>
+      </div>
+      <button id="close-chatbot" style="background: none; border: none; color: white; cursor: pointer;">✕</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="message bot-message">
+        <div class="message-avatar">AI</div>
+        <div class="message-content">
+          สวัสดีค่ะ! ฉันคือผู้ช่วยทางการแพทย์ AI ของ MediCare Hospital 
+          ฉันสามารถให้คำแนะนำสุขภาพเบื้องต้นและตอบคำถามเกี่ยวกับบริการของเราได้
+          <div class="suggested-questions">
+            <h4>คำถามที่พบบ่อย:</h4>
+            <div class="suggested-questions-grid">
+              <button class="question-chip" data-question="อาการปวดหัวควรทำอย่างไร?">อาการปวดหัวควรทำอย่างไร?</button>
+              <button class="question-chip" data-question="วิธีบรรเทาอาการไข้?">วิธีบรรเทาอาการไข้?</button>
+              <button class="question-chip" data-question="ควรไปพบแพทย์เมื่อไหร่?">ควรไปพบแพทย์เมื่อไหร่?</button>
+              <button class="question-chip" data-question="บริการของโรงพยาบาลมีอะไรบ้าง?">บริการของโรงพยาบาลมีอะไรบ้าง?</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-footer">
+      <div class="chat-input-group">
+        <textarea class="chat-input" id="chatInput" placeholder="ถามเรื่องสุขภาพทั่วไปได้เลย..." rows="1"></textarea>
+        <div class="chat-actions">
+          <button class="chat-btn image-btn" id="imageBtn" title="อัพโหลดรูปภาพ">
+            <span>📷</span>
+          </button>
+          <button class="chat-btn mic-btn" id="micBtn" title="พูด">
+            <span>🎤</span>
+          </button>
+          <button class="chat-btn send-btn" id="sendBtn">
+            <span>➤</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="imageUpload" accept="image/*" style="display: none;" />
+  </div>
+
+  <script>
+    // Mobile Navigation
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('nav ul');
+    
+    hamburger.addEventListener('click', () => {
+      navMenu.classList.toggle('show');
+    });
+
+    // Smooth Scrolling for Navigation Links
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+          targetSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Close mobile menu if open
+          navMenu.classList.remove('show');
+        }
+      });
+    });
+
+    // Appointment Form Submission
+    const appointmentForm = document.getElementById('appointment-form');
+    appointmentForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Thank you for your appointment request! We will contact you shortly.');
+      this.reset();
+    });
+
+    // Chatbot Functionality
+    const chatbotToggler = document.getElementById('chatbot-toggler');
+    const closeChatbot = document.getElementById('close-chatbot');
+    const chatbotPopup = document.querySelector('.chatbot-popup');
+    const chatBody = document.getElementById('chatBody');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const imageBtn = document.getElementById('imageBtn');
+    const micBtn = document.getElementById('micBtn');
+    const imageUpload = document.getElementById('imageUpload');
+
+    // Variables for voice recognition
+    let isRecording = false;
+    let recognition;
+    let hasRequestedPermission = false;
+
+    // Toggle Chatbot
+    chatbotToggler.addEventListener('click', () => {
+      chatbotPopup.classList.add('show');
+    });
+
+    closeChatbot.addEventListener('click', () => {
+      chatbotPopup.classList.remove('show');
+    });
+
+    // Add Message Function
+    function addMessage(content, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+      
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = 'message-avatar';
+      avatarDiv.textContent = isUser ? 'คุณ' : 'AI';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      
+      // Check if content is an image
+      if (content.startsWith('data:image')) {
+        const img = document.createElement('img');
+        img.src = content;
+        img.className = 'uploaded-image';
+        contentDiv.appendChild(img);
+      } else {
+        contentDiv.textContent = content;
+      }
+      
+      messageDiv.appendChild(avatarDiv);
+      messageDiv.appendChild(contentDiv);
+      chatBody.appendChild(messageDiv);
+      
+      // Scroll to bottom
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Show Typing Indicator
+    function showTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'typing-indicator';
+      typingDiv.id = 'typingIndicator';
+      
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'typing-dot';
+        typingDiv.appendChild(dot);
+      }
+      
+      chatBody.appendChild(typingDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Hide Typing Indicator
+    function hideTypingIndicator() {
+      const typingIndicator = document.getElementById('typingIndicator');
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+    }
+
+    // Send Message
+    async function sendMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+      
+      // Add user message
+      addMessage(message, true);
+      chatInput.value = '';
+      
+      // Show typing indicator
+      showTypingIndicator();
+      
+      try {
+        // Simulate API call (replace with actual API endpoint)
+        const response = await fetch('http://localhost:5001/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: message })
+        });
+        
+        const data = await response.json();
+        
+        // Hide typing indicator
+        hideTypingIndicator();
+        
+        // Add bot response
+        if (data.status === 'success') {
+          addMessage(data.response);
+        } else {
+          addMessage('ขออภัย เกิดข้อผิดพลาดในการประมวลผล: ' + data.message);
+        }
+      } catch (error) {
+        // Hide typing indicator
+        hideTypingIndicator();
+        
+        // Fallback responses when API is not available
+        const fallbackResponses = [
+          "สวัสดีค่ะ! ฉันคือ AI ช่วยตอบคำถามสุขภาพเบื้องต้นและข้อมูลเกี่ยวกับ MediCare Hospital ได้ค่ะ",
+          "ลองพักผ่อนให้เพียงพอและดื่มน้ำเยอะๆ นะคะ",
+          "หากอาการยังไม่ดีขึ้น ควรปรึกษาแพทย์โดยตรงที่โรงพยาบาลของเราค่ะ",
+          "คุณสามารถนัดหมายแพทย์กับเราได้ผ่านแบบฟอร์มนัดหมายในเว็บไซต์ค่ะ",
+          "เราเปิดบริการตลอด 24 ชั่วโมงที่แผนกฉุกเฉินค่ะ",
+          "มีอาการอื่นร่วมด้วยหรือไม่คะ?"
+        ];
+        
+        const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+        addMessage(randomResponse);
+      }
+    }
+
+    // Image Upload Function
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      // Check if file is an image
+      if (!file.type.match('image.*')) {
+        addMessage('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        return;
+      }
+      
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        const imageData = e.target.result;
+        
+        // Display image in chat
+        addMessage(imageData, true);
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Simulate image analysis
+        setTimeout(() => {
+          hideTypingIndicator();
+          
+          // Responses for image analysis
+          const imageResponses = [
+            "ขอบคุณสำหรับรูปภาพค่ะ ฉันเห็นว่าเป็นรูปภาพทางการแพทย์ แต่ฉันยังไม่สามารถวิเคราะห์รูปภาพได้ในขณะนี้",
+            "ฉันได้รับรูปภาพของคุณแล้ว แต่ฟังก์ชันการวิเคราะห์รูปภาพยังอยู่ในช่วงพัฒนา",
+            "รูปภาพนี้ดูน่าสนใจ แต่เพื่อการวิเคราะห์ที่ถูกต้อง ควรปรึกษาแพทย์ผู้เชี่ยวชาญ",
+            "ฉันเห็นรูปภาพที่คุณส่งมาแล้ว แต่ในเวอร์ชันปัจจุบัน ฉันยังไม่สามารถวิเคราะห์รูปภาพทางการแพทย์ได้"
+          ];
+          
+          const randomResponse = imageResponses[Math.floor(Math.random() * imageResponses.length)];
+          addMessage(randomResponse);
+        }, 2000);
+      };
+      
+      reader.readAsDataURL(file);
+      
+      // Reset file input
+      event.target.value = '';
+    }
+
+    // Show microphone permission request
+    function showMicrophonePermissionRequest() {
+      const permissionDiv = document.createElement('div');
+      permissionDiv.className = 'mic-permission-request';
+      permissionDiv.id = 'micPermissionRequest';
+      
+      permissionDiv.innerHTML = `
+        <p>เพื่อใช้ฟังก์ชันจดจำเสียง กรุณาอนุญาตให้เว็บไซต์เข้าถึงไมโครโฟนของคุณ</p>
+        <button class="permission-btn" id="grantPermissionBtn">อนุญาต</button>
+        <button class="permission-btn" id="cancelPermissionBtn" style="background: var(--text-light);">ยกเลิก</button>
+      `;
+      
+      chatBody.appendChild(permissionDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      
+      // Add event listeners for permission buttons
+      document.getElementById('grantPermissionBtn').addEventListener('click', () => {
+        permissionDiv.remove();
+        hasRequestedPermission = true;
+        startVoiceRecognition();
+      });
+      
+      document.getElementById('cancelPermissionBtn').addEventListener('click', () => {
+        permissionDiv.remove();
+        addMessage('คุณได้ปฏิเสธการเข้าถึงไมโครโฟน คุณยังสามารถใช้การพิมพ์เพื่อสื่อสารกับฉันได้ค่ะ');
+      });
+    }
+
+    // Voice Recognition Functions
+    function startVoiceRecognition() {
+      // Check if browser supports Web Speech API
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        addMessage('ขออภัย เบราว์เซอร์ของคุณไม่รองรับการจดจำเสียงพูด');
+        return;
+      }
+      
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'th-TH'; // Thai language
+      
+      recognition.onstart = function() {
+        isRecording = true;
+        micBtn.classList.add('recording');
+        addMessage('กำลังฟัง...', true);
+      };
+      
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        chatInput.value = transcript;
+        
+        // Automatically send message after voice recognition
+        setTimeout(sendMessage, 500);
+      };
+      
+      recognition.onerror = function(event) {
+        isRecording = false;
+        micBtn.classList.remove('recording');
+        
+        // Handle specific error cases
+        if (event.error === 'not-allowed') {
+          if (!hasRequestedPermission) {
+            showMicrophonePermissionRequest();
+          } else {
+            addMessage('ไมโครโฟนถูกปฏิเสธ กรุณาอนุญาตการเข้าถึงไมโครโฟนในเบราว์เซอร์ของคุณ');
+          }
+        } else if (event.error === 'no-speech') {
+          addMessage('ไม่พบเสียงพูด กรุณาพูดใหม่อีกครั้ง');
+        } else if (event.error === 'audio-capture') {
+          addMessage('ไม่พบอุปกรณ์บันทึกเสียง กรุณาตรวจสอบไมโครโฟนของคุณ');
+        } else {
+          addMessage('เกิดข้อผิดพลาดในการจดจำเสียง: ' + event.error);
+        }
+      };
+      
+      recognition.onend = function() {
+        isRecording = false;
+        micBtn.classList.remove('recording');
+      };
+      
+      try {
+        recognition.start();
+      } catch (error) {
+        addMessage('ไม่สามารถเริ่มการจดจำเสียงได้ กรุณาลองใหม่อีกครั้ง');
+      }
+    }
+
+    function stopVoiceRecognition() {
+      if (recognition && isRecording) {
+        recognition.stop();
+        isRecording = false;
+        micBtn.classList.remove('recording');
+      }
+    }
+
+    // Event Listeners for Chatbot
+    sendBtn.addEventListener('click', sendMessage);
+
+    chatInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Auto-resize textarea
+    chatInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Image upload event listeners
+    imageBtn.addEventListener('click', function() {
+      imageUpload.click();
+    });
+
+    imageUpload.addEventListener('change', handleImageUpload);
+
+    // Voice recognition event listeners
+    micBtn.addEventListener('click', function() {
+      if (isRecording) {
+        stopVoiceRecognition();
+      } else {
+        // Check if we've already requested permission
+        if (!hasRequestedPermission) {
+          showMicrophonePermissionRequest();
+        } else {
+          startVoiceRecognition();
+        }
+      }
+    });
+
+    // Add event listeners for sample question chips (only in welcome message)
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('question-chip')) {
+        const question = e.target.dataset.question;
+        chatInput.value = question;
+        sendMessage();
+      }
+    });
+
+    // Focus on input when chatbot opens
+    chatbotToggler.addEventListener('click', () => {
+      setTimeout(() => {
+        chatInput.focus();
+      }, 300);
+    });
+  </script>
+   <!-- Medical Disclaimer Banner -->
+  <div class="medical-disclaimer">
+    <div class="disclaimer-content">
+      <div class="disclaimer-header">
+        <span class="disclaimer-icon">⚠️</span>
+        <h2 class="disclaimer-title">MEDICAL SAFETY DISCLAIMER</h2>
+      </div>
+      <p>
+        <strong>This is a university project demonstration for EN842300 Interactive Web Programming.</strong> 
+        This AI assistant provides general health information only and is not a substitute for professional medical advice.
+      </p>
+      <div class="emergency-contacts">
+        <strong class="emergency-title">🚨 Emergency Contacts</strong>
+        <div>
+          <p><a href="tel:911" style="color: var(--error-red); text-decoration: none; font-weight: 600;">📞 US Emergency: 911</a></p>
+          <p><a href="tel:1669" style="color: var(--error-red); text-decoration: none; font-weight: 600;">📞 Thailand EMS: 1669</a></p>
+          <p><a href="https://www.poisoncenter.or.th/" style="color: var(--error-red); text-decoration: none; font-weight: 600;">🧪 Poison Control Center</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
